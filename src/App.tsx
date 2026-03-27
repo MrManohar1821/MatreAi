@@ -422,27 +422,7 @@ export default function App() {
             </motion.button>
           </div>
 
-          <div className="bg-app rounded-2xl p-4 flex items-center gap-3">
-            {user.isAnonymous ? (
-              <div className="w-10 h-10 rounded-full border-2 border-card shadow-sm bg-rose-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-rose-500" />
-              </div>
-            ) : (
-              <img src={user.photoURL || ''} alt="" className="w-10 h-10 rounded-full border-2 border-card shadow-sm" />
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-main truncate">{user.isAnonymous ? 'Guest User' : user.displayName}</p>
-              <p className="text-xs text-muted truncate">{user.isAnonymous ? 'Not logged in' : user.email}</p>
-            </div>
-            <motion.button 
-              whileHover={{ scale: 1.1, x: 2 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={logout} 
-              className="p-2 text-muted hover:text-rose-500 transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-            </motion.button>
-          </div>
+
         </div>
       </aside>
 
@@ -970,7 +950,6 @@ function Chat({ user, messages, setMessages, t, language }: { user: FirebaseUser
       exit={{ opacity: 0, scale: 0.95 }}
       className="h-[calc(100vh-8rem)] md:h-[calc(100vh-12rem)] flex flex-col bg-card rounded-3xl shadow-xl border border-divider overflow-hidden relative"
     >
-      <div className="absolute inset-0 z-[1] opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url(/chat-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <AnimatePresence>
         {showClearConfirm && (
           <motion.div 
@@ -1025,7 +1004,7 @@ function Chat({ user, messages, setMessages, t, language }: { user: FirebaseUser
         </button>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth relative z-10">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
         {messages.length === 0 && (
           <div className="text-center py-12 space-y-4">
             <div className="w-16 h-16 bg-rose-50 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto">
@@ -1097,15 +1076,14 @@ function Chat({ user, messages, setMessages, t, language }: { user: FirebaseUser
         ))}
       </div>
 
-      <form onSubmit={handleSend} className="p-4 bg-app/50 border-t border-divider flex gap-2 relative z-10">
+      <form onSubmit={handleSend} className="p-4 bg-app/50 border-t border-divider flex gap-2">
         <motion.input 
           whileFocus={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={isRecording ? t('recordingAudio') : t('typeMessage')}
-          disabled={isRecording}
-          className="flex-1 bg-card px-6 py-3 rounded-2xl border border-divider disabled:bg-app disabled:opacity-80 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-colors text-main"
+          placeholder={t('typeMessage')}
+          className="flex-1 bg-card px-6 py-3 rounded-2xl border border-divider focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-colors text-main"
         />
         <motion.button
           type="button"

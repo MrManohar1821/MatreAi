@@ -87,7 +87,14 @@ export const translations = {
     saving: "Saving...",
     saveMood: "Save Mood Entry",
     continueAsGuest: "Continue without Login",
-    emergencyAmbulance: "Emergency Ambulance (108)"
+    emergencyAmbulance: "Emergency Ambulance (108)",
+    or: "OR",
+    welcomeMama: "Welcome back, Mama! 🌸 Remember to drink a glass of water and rest your feet. How are you and your little one feeling right now? I'm always here to listen, support, and guide you through this beautiful journey.",
+    suggestMorningSickness: "Morning sickness tips",
+    suggestHealthySnacks: "Healthy snack ideas",
+    suggestSleep: "How to sleep better",
+    suggestGrowth: "My baby's growth",
+    suggestOverwhelmed: "Feeling overwhelmed"
   },
   kn: {
     appName: "ಮಾತೃತ್ವAI (MaternalAI)",
@@ -177,7 +184,14 @@ export const translations = {
     saving: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
     saveMood: "ಮೂಡ್ ನಮೂದನ್ನು ಉಳಿಸಿ",
     continueAsGuest: "ಲಾಗಿನ್ ಇಲ್ಲದೆ ಮುಂದುವರಿಯಿರಿ",
-    emergencyAmbulance: "ತುರ್ತು ಆಂಬ್ಯುಲೆನ್ಸ್ (108)"
+    emergencyAmbulance: "ತುರ್ತು ಆಂಬ್ಯುಲೆನ್ಸ್ (108)",
+    or: "ಅಥವಾ",
+    welcomeMama: "ಮರಳಿ ಸ್ವಾಗತ, ಅಮ್ಮ! 🌸 ಒಂದು ಲೋಟ ನೀರು ಕುಡಿದು ಸ್ವಲ್ಪ ಹೊತ್ತು ವಿಶ್ರಾಂತಿ ತೆಗೆದುಕೊಳ್ಳಿ. ಈಗ ನೀವು ಮತ್ತು ನಿಮ್ಮ ಮಗು ಹೇಗಿದ್ದೀರಿ? ಈ ಸುಂದರವಾದ ಪ್ರಯಾಣದಲ್ಲಿ ನಿಮ್ಮನ್ನು ಬೆಂಬಲಿಸಲು ಮತ್ತು ಕೇಳಿಸಿಕೊಳ್ಳಲು ನಾನು ಯಾವಾಗಲೂ ಇಲ್ಲಿದ್ದೇನೆ.",
+    suggestMorningSickness: "ಮುಂಜಾನೆಯ ಅಸ್ವಸ್ಥತೆ",
+    suggestHealthySnacks: "ಆರೋಗ್ಯಕರ ತಿಂಡಿಗಳು",
+    suggestSleep: "ನಿದ್ರೆಯ ಸಲಹೆಗಳು",
+    suggestGrowth: "ಮಗುವಿನ ಬೆಳವಣಿಗೆ",
+    suggestOverwhelmed: "ತುಂಬಾ ಆತಂಕವಾಗಿದೆ"
   },
   hi: {
     appName: "मातृत्वAI (MaternalAI)",
@@ -267,7 +281,14 @@ export const translations = {
     saving: "सहेजा जा रहा है...",
     saveMood: "मूड प्रविष्टि सहेजें",
     continueAsGuest: "लॉगिन के बिना जारी रखें",
-    emergencyAmbulance: "आपातकालीन एम्बुलेंस (108)"
+    emergencyAmbulance: "आपातकालीन एम्बुलेंस (108)",
+    or: "या",
+    welcomeMama: "वापसी पर स्वागत है, माँ! 🌸 एक गिलास पानी पिएं और थोड़ी देर आराम करें। अभी आप और आपका नन्हा मुन्ना कैसा महसूस कर रहे हैं? इस खूबसूरत सफर में आपकी बात सुनने और आपका साथ देने के लिए मैं हमेशा यहाँ हूँ।",
+    suggestMorningSickness: "मॉर्निंग सिकनेस",
+    suggestHealthySnacks: "स्वस्थ नाश्ता",
+    suggestSleep: "नींद के टिप्स",
+    suggestGrowth: "बच्चे का विकास",
+    suggestOverwhelmed: "अभिभूत महसूस करना"
   }
 };
 
