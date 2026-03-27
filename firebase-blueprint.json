@@ -1,0 +1,111 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastLogin": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "PregnancyData": {
+      "title": "PregnancyData",
+      "description": "Real-time pregnancy tracking data",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "trimester": { "type": "number" },
+        "age": { "type": "number" },
+        "medicalHistory": { "type": "string" },
+        "symptoms": { "type": "array", "items": { "type": "string" } },
+        "systolicBP": { "type": "number" },
+        "diastolicBP": { "type": "number" },
+        "heartRate": { "type": "number" },
+        "weight": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "trimester", "age"]
+    },
+    "RiskAssessment": {
+      "title": "RiskAssessment",
+      "description": "AI-generated risk assessment results",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "riskLevel": { "type": "string", "enum": ["low", "medium", "high"] },
+        "assessmentDate": { "type": "string", "format": "date-time" },
+        "recommendations": { "type": "array", "items": { "type": "string" } },
+        "alerts": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["userId", "riskLevel", "assessmentDate"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Chat interaction history",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "content", "timestamp"]
+    },
+    "KickSession": {
+      "title": "KickSession",
+      "description": "Fetal movement tracking session",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "kickCount": { "type": "number" },
+        "durationMinutes": { "type": "number" }
+      },
+      "required": ["userId", "startTime", "kickCount"]
+    },
+    "MoodEntry": {
+      "title": "MoodEntry",
+      "description": "Daily mood and wellness tracking",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "mood": { "type": "string", "enum": ["happy", "calm", "tired", "anxious", "sad"] },
+        "note": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "mood", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/pregnancy_data/{userId}": {
+      "schema": "PregnancyData",
+      "description": "Pregnancy tracking data per user"
+    },
+    "/risk_assessments/{userId}/history/{assessmentId}": {
+      "schema": "RiskAssessment",
+      "description": "Risk assessment history for a user"
+    },
+    "/chats/{userId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Chat messages for a user session"
+    },
+    "/kick_sessions/{userId}/sessions/{sessionId}": {
+      "schema": "KickSession",
+      "description": "Fetal movement sessions"
+    },
+    "/mood_entries/{userId}/entries/{entryId}": {
+      "schema": "MoodEntry",
+      "description": "Daily mood tracking"
+    }
+  }
+}

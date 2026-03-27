@@ -1,0 +1,158 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: uid
+    // Fields:
+    //   - uid: string (required)
+    //   - displayName: string (optional)
+    //   - email: string (required)
+    //   - lastLogin: timestamp (optional)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: pregnancy_data
+    // Document ID: userId
+    // Fields:
+    //   - userId: string (required)
+    //   - age: number (required)
+    //   - trimester: number (required, 1-3)
+    //   - systolicBP: number (required)
+    //   - diastolicBP: number (required)
+    //   - heartRate: number (required)
+    //   - weight: number (required)
+    //   - symptoms: list (optional)
+    //   - medicalHistory: string (optional)
+    //   - updatedAt: string (required, ISO 8601)
+    //
+    // Collection: risk_assessments/{userId}/history
+    // Document ID: assessmentId
+    // Fields:
+    //   - userId: string (required)
+    //   - riskLevel: string (required, low/medium/high)
+    //   - assessmentDate: timestamp (required)
+    //   - recommendations: list (required)
+    //   - alerts: list (required)
+    //   - summary: string (required)
+    //
+    // Collection: chats/{userId}/messages
+    // Document ID: messageId
+    // Fields:
+    //   - userId: string (required)
+    //   - role: string (required, user/assistant)
+    //   - content: string (required)
+    //   - timestamp: timestamp (required)
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "sachinna4647@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidDateString(dateStr) {
+      return dateStr is string && dateStr.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z?$");
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Domain Validators
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() > 0 &&
+             (!('email' in data) || data.email == null || (data.email is string && isValidEmail(data.email))) &&
+             (!('displayName' in data) || data.displayName == null || (data.displayName is string && data.displayName.size() < 100));
+    }
+
+    function isValidPregnancyData(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.age is number && data.age > 0 && data.age < 100 &&
+             data.trimester is number && data.trimester >= 1 && data.trimester <= 3 &&
+             data.systolicBP is number && data.diastolicBP is number &&
+             data.heartRate is number && data.weight is number &&
+             isValidDateString(data.updatedAt) &&
+             (!('symptoms' in data) || (data.symptoms is list && data.symptoms.size() < 50)) &&
+             (!('medicalHistory' in data) || (data.medicalHistory is string && data.medicalHistory.size() < 2000));
+    }
+
+    function isValidRiskAssessment(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.riskLevel in ['low', 'medium', 'high'] &&
+             data.recommendations is list && data.recommendations.size() < 50 &&
+             data.alerts is list && data.alerts.size() < 50 &&
+             data.summary is string && data.summary.size() < 2000;
+    }
+
+    function isValidChatMessage(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.role in ['user', 'assistant'] &&
+             data.content is string && data.content.size() > 0 && data.content.size() < 10000;
+    }
+
+    function isValidKickSession(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.kickCount is number && data.kickCount >= 0 &&
+             isValidDateString(data.startTime);
+    }
+
+    function isValidMoodEntry(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.mood in ['happy', 'calm', 'tired', 'anxious', 'sad'] &&
+             (!('note' in data) || (data.note is string && data.note.size() < 1000));
+    }
+
+    // Rules
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if (isOwner(userId) && isValidUser(request.resource.data)) || isAdmin();
+      allow update: if (isOwner(userId) && isValidUser(request.resource.data)) || isAdmin();
+    }
+
+    match /pregnancy_data/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if (isOwner(userId) && isValidPregnancyData(request.resource.data)) || isAdmin();
+      allow update: if (isOwner(userId) && isValidPregnancyData(request.resource.data)) || isAdmin();
+    }
+
+    match /risk_assessments/{userId}/history/{assessmentId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if (isOwner(userId) && isValidRiskAssessment(request.resource.data)) || isAdmin();
+    }
+
+    match /chats/{userId}/messages/{messageId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if (isOwner(userId) && isValidChatMessage(request.resource.data)) || isAdmin();
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    match /kick_sessions/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    match /mood_entries/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    match /vitals_history/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+  }
+}

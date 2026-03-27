@@ -1,0 +1,8 @@
+{
+  "name": "MaternalAI: Pregnancy Care Companion",
+  "description": "An AI-powered maternal healthcare chatbot for risk assessment, personalized care recommendations, and real-time pregnancy guidance.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ]
+}
